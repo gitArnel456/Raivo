@@ -15,10 +15,10 @@ namespace Raivo.Controllers
             return View();
         }
         
-        public void ajouterUtilisateur(Inscription inscription)
+        public void ajouterUtilisateur(Login login)
         {
             DBConnection connection = new DBConnection();
-            connection.ajouterUtilisateur(inscription);
+            connection.ajouterUtilisateur(login);
         }
     }
 }
