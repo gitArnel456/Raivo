@@ -30,6 +30,22 @@ namespace Raivo.Models
                 throw ex;
             }
             return hasUser;
+        }
+
+        public void ajouterUtilisateur(Login login)
+        {
+            var req = $"INSERT INTO public.login(nom_prenom, nomutilisateur, motdepasse) VALUES ('{login.Nom_prenom}', '{login.Nomutilisateur}', '{login.Motdepasse}')";
+            try
+            {
+                connectionstring.Open();
+                var cmd = new NpgsqlCommand(req, connectionstring);
+                cmd.ExecuteNonQuery();
+                connectionstring.Close();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
        }
 
         public void ajouterUtilisateur(Inscription inscription)
@@ -66,14 +82,22 @@ namespace Raivo.Models
             }
         }
 
+        public static List<Taches> retrouverTaches(string nomutilisateur)
         public void deleteTaches(Taches taches)
         {
+            var req = $"SELECT * FROM public.taches WHERE username = '{nomutilisateur}'";
+            var taches = new List<Taches>();
             var req = $"DELETE FROM public.taches WHERE id = { taches.Id }; ";
             try
             {
                 connectionstring.Open();
                 var cmd = new NpgsqlCommand(req, connectionstring);
-                cmd.ExecuteNonQuery();
+                var rd = cmd.ExecuteReader();
+                while (rd.Read())
+                {
+                    var tache = new Taches(rd.GetInt32(0), rd.GetString(1), rd.GetString(2), rd.GetBoolean(3));
+                    taches.Add(tache);
+                }
                 connectionstring.Close();
             }catch(Exception e)
             {
@@ -81,6 +105,7 @@ namespace Raivo.Models
             }
         }
 
+            return taches;
         public void updateTaches(Taches taches)
         {
             var req = $"UPDATE public.taches SET nomutilisateur = { taches.Nomutilisateur }, " +
@@ -94,6 +119,21 @@ namespace Raivo.Models
             }catch (Exception e) { throw e; }
         }
 
+        public void ajouterTaches(Taches taches)
+        {
+            var req =$"INSERT INTO public.taches(nomutilisateur, description, etat) VALUES('{taches.Nomutilisateur}', '{taches.Description}', '{taches.Etat}')";
+         
+            try
+            {
+                connectionstring.Open();
+                var cmd = new NpgsqlCommand(req, connectionstring);
+                cmd.ExecuteNonQuery();
+                connectionstring.Close();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         public static List<Taches> displayTaches(string nomutilisateur)
         {
             var req = $"SELECT * FROM public.taches WHERE nomutilisateur ={nomutilisateur}";
@@ -112,6 +152,10 @@ namespace Raivo.Models
             }catch(Exception e) { throw e; }
             return taches;
         }
+
+        }
+    }
+}
 
     }
 }

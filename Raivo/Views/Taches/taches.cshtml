@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Raivo.Models.Taches>
+
+@{
+    ViewBag.Title = "taches";
+}
+
+<h2><b>Mes taches</b></h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Tacheid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nomutilisateur)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Etat)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tacheid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nomutilisateur)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Etat)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

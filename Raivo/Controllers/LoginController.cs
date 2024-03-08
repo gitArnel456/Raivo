@@ -18,13 +18,24 @@ namespace Raivo.Controllers
         {
             if (DBConnection.verifylogin(login))
             {
-                return Content($"<h1>Bonjour {login.Nomutilisateur}</h1>");
+                return View($"taches");
             }
             else
             {
                 return Content($"<h1>ERROR ENTER GOOOD USETR</h1>");
             }
         }
+
+
+       // [HttpPost]
+        public ActionResult ajouterUtilisateur(Login login)
+        {
+            DBConnection connection = new DBConnection();
+            connection.ajouterUtilisateur(login);
+
+            return View("Index");
+        }
+
 
         // GET: Login/Details/5
         public ActionResult Details(int id)
