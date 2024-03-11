@@ -1,0 +1,129 @@
+﻿@model IEnumerable<Raivo.Models.Taches>
+
+@{
+    ViewBag.Title = "Tasks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Tasks</h2>
+
+<p>
+
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nomutilisateur)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Etat)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Nomutilisateur)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Etat)
+            </td>
+            <td>
+                <button type="button" id="@item.Id" class="btn btn-outline-primary edit-button" data-bs-toggle="modal" data-bs-target="#modifyTask" onclick="updateFields(@item.Id)">
+                    Edit
+                </button>
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+    <div class="modal fade" id="modifyTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Inscription</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("AjouterTaches", "Taches", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label"> Les taches</label>
+                            <input type="text" class="form-control" name="description">
+                        </div>
+
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="etat">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">check out</label>
+                        </div>
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-6">
+                                <input type="submit" value="Valider" class="btn btn-ms btn-primary btn-block" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</table>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Add new task
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" >Inscription</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("AjouterTaches", "Taches", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label"> Les taches</label>
+                        <input type="text" class="form-control" name="description">
+                    </div>
+
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="etat">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">check out</label>
+                    </div>
+
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-6">
+                            <input type="submit" value="Valider" class="btn btn-ms btn-primary btn-block"/>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

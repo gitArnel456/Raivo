@@ -11,36 +11,49 @@ namespace Raivo.Controllers
     public class TachesController : Controller
     {
         // GET: Taches
-
-
-        public class TacheController : Controller
-        {
-            public ActionResult ListeTache()
+            public ActionResult Tasks()
             {
-
-                string nomUtilisateur = Session["Nomutilisateur"].ToString();
-
-                DBConnection.retrouverTaches(nomUtilisateur);
-                return View(DBConnection.retrouverTaches("nomUtilisateur"));
+            if (Session["username"] != null)
+            {
+                return View(DBConnection.retrouverTaches(Session["username"].ToString()));
             }
-
-            public ActionResult Modifier(int id)
+            else
             {
-                return Content($"<h4> Ressource numéro : {id} </h4>");
+                // Gérer le cas où le nom d'utilisateur n'est pas défini dans la session
+                // Par exemple, rediriger vers une page de connexion
+                return RedirectToAction("Index");
             }
         }
 
-        public ActionResult taches()
+            //public ActionResult Modifier(int id)
+            //{
+            //    return Content($"<h4> Ressource numéro : {id} </h4>");
+            //}
+
+        public ActionResult AjouterTaches(FormCollection form)
         {
-            return View();
+            var tache = new Taches(Session["username"].ToString(), form["description"], form["etat"] == null ? false : true);
+            DBConnection.AjouterTaches(tache);
+            return RedirectToAction("Tasks");
         }
-
-        public ActionResult ajouterTaches(Taches taches)
+        public ActionResult Delete(int id)
         {
-            DBConnection connection = new DBConnection();
-            connection.ajouterUtilisateur(taches);
-
-            return View("taches");
+            try
+            {
+                DBConnection.deleteTaches(id);
+                return RedirectToAction("Tasks");
+            }
+            catch (Exception ex)
+            {
+                return View("Error", ex);
+            }
+        }
+        public ActionResult Edit(FormCollection form)
+        {
+            var taches = new Taches("rabe","milalao be",true);
+            DBConnection.updateTaches(9, taches);
+            return RedirectToAction("Tasks");
+            //return Content();
         }
     }
 }

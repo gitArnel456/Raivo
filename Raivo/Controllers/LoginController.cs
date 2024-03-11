@@ -18,11 +18,12 @@ namespace Raivo.Controllers
         {
             if (DBConnection.verifylogin(login))
             {
-                return View($"taches");
+                Session["username"] = login.Nomutilisateur;
+                return RedirectToRoute("Task");
             }
             else
             {
-                return Content($"<h1>ERROR ENTER GOOOD USETR</h1>");
+                return RedirectToAction("Index");
             }
         }
 

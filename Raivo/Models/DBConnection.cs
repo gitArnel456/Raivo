@@ -46,48 +46,14 @@ namespace Raivo.Models
             {
                 throw e;
             }
-       }
-
-        public void ajouterUtilisateur(Inscription inscription)
-        {
-            var req = $"INSERT INTO public.inscription(nom_prenom, nomutilisateur, motdepasse) VALUES ('{inscription.Nom_prenom}'," +
-                $" '{inscription.Nomutilisateur}', '{inscription.Motdepasse}')";
-            try
-            {
-                connectionstring.Open();
-                var cmd = new NpgsqlCommand(req, connectionstring);
-                cmd.ExecuteNonQuery();
-                connectionstring.Close();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
         }
 
-        public void createTaches(Taches taches)
-        {
-            var req = $"INSERT INTO public. taches(nomutilisateur,description,state) VALUES" +
-                $" ('{taches.Nomutilisateur}','{taches.Description}','{taches.Etat}')";
-            try
-            {
-                connectionstring.Open();
-                var cmd = new NpgsqlCommand(req,connectionstring);
-                cmd.ExecuteNonQuery();
-                connectionstring.Close();
-            }catch (Exception e)
-            {
-                throw e;
-            }
-        }
+
 
         public static List<Taches> retrouverTaches(string nomutilisateur)
-        public void deleteTaches(Taches taches)
         {
-            var req = $"SELECT * FROM public.taches WHERE username = '{nomutilisateur}'";
+            var req = $"SELECT * FROM public.taches WHERE nomutilisateur = '{nomutilisateur}'";
             var taches = new List<Taches>();
-            var req = $"DELETE FROM public.taches WHERE id = { taches.Id }; ";
             try
             {
                 connectionstring.Open();
@@ -99,30 +65,17 @@ namespace Raivo.Models
                     taches.Add(tache);
                 }
                 connectionstring.Close();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 throw e;
             }
-        }
-
             return taches;
-        public void updateTaches(Taches taches)
-        {
-            var req = $"UPDATE public.taches SET nomutilisateur = { taches.Nomutilisateur }, " +
-                $"description = { taches.Description }, etat = { taches.Etat} WHERE id = { taches.Id }; ";
-            try
-            {
-                connectionstring.Open();
-                var cmd = new NpgsqlCommand(req, connectionstring);
-                cmd.ExecuteNonQuery();
-                connectionstring.Close();
-            }catch (Exception e) { throw e; }
         }
-
-        public void ajouterTaches(Taches taches)
+        public static void AjouterTaches(Taches taches)
         {
-            var req =$"INSERT INTO public.taches(nomutilisateur, description, etat) VALUES('{taches.Nomutilisateur}', '{taches.Description}', '{taches.Etat}')";
-         
+            var req = $"INSERT INTO public.taches(nomutilisateur, description, etat) VALUES('{taches.Nomutilisateur}', '{taches.Description}', '{taches.Etat}')";
+
             try
             {
                 connectionstring.Open();
@@ -134,31 +87,40 @@ namespace Raivo.Models
             {
                 throw e;
             }
-        public static List<Taches> displayTaches(string nomutilisateur)
+        }
+
+        public static void deleteTaches(int id)
         {
-            var req = $"SELECT * FROM public.taches WHERE nomutilisateur ={nomutilisateur}";
-            var taches = new List<Taches>();
+            var req = $"DELETE FROM public.taches WHERE id = '{id}'";
             try
             {
                 connectionstring.Open();
-                var cmd = new NpgsqlCommand(req, connectionstring);
-                var rd = cmd.ExecuteReader();
-                while (rd.Read())
-                {
-                    var tache = new Taches(rd.GetInt32(0),rd.GetString(1),rd.GetString(2),rd.GetBoolean(4));
-                    taches.Add(tache);
-                }
+                var cmd = new NpgsqlCommand(req,connectionstring);
+                cmd.ExecuteNonQuery();
                 connectionstring.Close();
-            }catch(Exception e) { throw e; }
-            return taches;
+            }catch (Exception e) { throw e; }
+            
         }
 
+          
+        public static void updateTaches(int id,Taches taches)
+        {
+            var req = $"UPDATE public.taches SET description = '{ taches.Description }', etat = '{ taches.Etat}' WHERE id = '{id}'";
+            try
+            {
+                connectionstring.Open();
+                
+                var cmd = new NpgsqlCommand(req, connectionstring);
+                cmd.ExecuteNonQuery();
+                connectionstring.Close();
+            }catch (Exception e) 
+            { 
+                throw e; 
+            }
         }
     }
 }
 
-    }
-}
 
 
 
